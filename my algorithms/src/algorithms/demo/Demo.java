@@ -44,5 +44,6 @@ public class Demo {
 
 	public static void main(String[] args) {
 		run(new GrowingTreeGenerator());
+		System.out.println("Test 1");
 	}
 }
