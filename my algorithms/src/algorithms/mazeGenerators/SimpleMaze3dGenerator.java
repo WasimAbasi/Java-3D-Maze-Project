@@ -211,6 +211,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			}
 			direction.nextDirection();
 		}
+		System.out.println("HELLO!");
 		return false;
 	}
 
