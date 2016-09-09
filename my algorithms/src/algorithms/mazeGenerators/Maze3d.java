@@ -1,4 +1,5 @@
 package algorithms.mazeGenerators;
+
 /**
 * Class Maze3d represents a three dimensional maze.
 * @author Wasim, Roaa
@@ -176,11 +177,11 @@ public class Maze3d {
 		if (c.getZ()+1 >= z-1 || maze3d[c.getX()][c.getY()][c.getZ()+1] != 1){
 			return null;
 		}
-		if (c.getZ()+2 >= z-1 || maze3d[c.getX()][c.getY()][c.getZ()+2] != 1){
+		/*if (c.getZ()+2 >= z-1 || maze3d[c.getX()][c.getY()][c.getZ()+2] != 1){
 			return null;
-		}
-		Position up = new Position(c.getX(), c.getY(), c.getZ()+2);
-		up.setPassage(new Position(c.getX(), c.getY(), c.getZ()+1));
+		}*/
+		Position up = new Position(c.getX(), c.getY(), c.getZ()+1);
+		//up.setPassage(new Position(c.getX(), c.getY(), c.getZ()+1));
 		return up;
 	}
 	
@@ -188,11 +189,11 @@ public class Maze3d {
 		if (c.getZ()-1 <= 0 || maze3d[c.getX()][c.getY()][c.getZ()-1] != 1){
 			return null;
 		}
-		if (c.getZ()-2 <= 0 || maze3d[c.getX()][c.getY()][c.getZ()-2] != 1){
+		/*if (c.getZ()-2 <= 0 || maze3d[c.getX()][c.getY()][c.getZ()-2] != 1){
 			return null;
-		}
-		Position down = new Position(c.getX(), c.getY(), c.getZ()-2);
-		down.setPassage(new Position(c.getX(), c.getY(), c.getZ()-1));
+		}*/
+		Position down = new Position(c.getX(), c.getY(), c.getZ()-1);
+		//down.setPassage(new Position(c.getX(), c.getY(), c.getZ()-1));
 		return down;
 	}
 	

@@ -1,13 +1,12 @@
 package algorithms.mazeGenerators;
 
+import java.util.Random;
+
 /**
  * Generator for creating a simple maze
  * @author Wasim, Roaa
  *
  */
-
-import java.util.Random;
-
 public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 
 	@Override
@@ -32,7 +31,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			position.setZ(floor); //next floor
 			simpleMaze.setMaze3d(position, 0); //set start point at floor z
 			Position targetPosition = pg.specificFloorRandomPosition(x, y, floor);
-			simpleMaze.setMaze3d(targetPosition, 0); //set finish point at floor z
+			//simpleMaze.setMaze3d(targetPosition, 0); //set finish point at floor z
 			//find random path from start position to target position on each floor
 			findRandomPath(simpleMaze, position, targetPosition);
 			//initialize next floor's starting point
@@ -45,7 +44,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 		simpleMaze.setMaze3d(position, 0);
 		simpleMaze.setExit(position);
 		
-		Position p;
+		/*Position p;
 		//Tearing Down additional walls randomly, up to 1/4 of the walls can be torn down
 		Random ran = new Random();
 		int repeat = ran.nextInt((x*y*z)/4); 
@@ -54,7 +53,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			if(legal(simpleMaze, p)){ //if tearing down wall within rules of maze
 				simpleMaze.setMaze3d(p, 0);
 			}
-		}
+		}*/
 		
 		return simpleMaze;
 	}
@@ -68,9 +67,10 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			return false;
 		
 		//if on internal floor and there's a potential for illegal maze
-		if(p.isInternal(simpleMaze.getX(), simpleMaze.getY(), simpleMaze.getZ()) 
-				&& potentialSquare(simpleMaze, p)){
-			return false;
+		if(p.isInternal(simpleMaze.getX(), simpleMaze.getY(), simpleMaze.getZ())){
+			if(potentialSquare(simpleMaze, p)){
+				return false;
+			}
 				
 		} else if(potentialIllegalMove(simpleMaze, p)) // on side wall, ground floor or ceiling
 				return false;
@@ -78,9 +78,9 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 		return true;
 	}
 		
-	//Check for potential squares on specific cross sections
+	//Check for potential squares
 	private boolean potentialSquare(Maze3d simpleMaze, Position p) {
-		
+	/*	
 		//check potential for illegal squares on (y,z) axis
 		int[][] maze2dx=simpleMaze.getCrossSectionByX(p.getX());
 		if(checkSquares(maze2dx, p.getY(), p.getZ()))
@@ -89,7 +89,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 		//check potential for illegal squares on (x,z) axis
 		int[][] maze2dy=simpleMaze.getCrossSectionByY(p.getY());
 		if(checkSquares(maze2dy, p.getX(), p.getZ()))
-			return true;
+			return true;*/
 		
 		//check potential for illegal squares on (x,y) axis
 		int[][] maze2dz=simpleMaze.getCrossSectionByZ(p.getZ());
@@ -121,7 +121,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			return false;
 		}
 
-		//Potential illegal move on a side wall, ground floor or ceiling
+		//Potential illegal move on a side wall, ground floor or ceiling - no traveling allowed
 		private boolean potentialIllegalMove(Maze3d simpleMaze, Position p) {
 			
 			if(p.onSideSectionByX(simpleMaze.getX())){
@@ -174,7 +174,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 		return true;
 	}
 
-	//helper method: randomly find path in a single floor from start position to target
+	//helper method: randomly find path in a single floor from start position to target position
 	private boolean findRandomPath(Maze3d simpleMaze, Position startPosition,
 			Position targetPosition) {
 		
@@ -197,10 +197,10 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 				nextMove.setX(startPosition.getX()+1);
 			}
 			if(direction.toString().equals("Forward")){
-				nextMove.setX(startPosition.getY()+1);
+				nextMove.setY(startPosition.getY()+1);
 			}
 			if(direction.toString().equals("Back")){
-				nextMove.setX(startPosition.getY()-1);
+				nextMove.setY(startPosition.getY()-1);
 			}
 			if(legal(simpleMaze, nextMove)){
 				simpleMaze.setMaze3d(nextMove, 0);
@@ -212,7 +212,6 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			}
 			direction.nextDirection();
 		}
-		System.out.println("HELLO!");
 		return false;
 	}
 

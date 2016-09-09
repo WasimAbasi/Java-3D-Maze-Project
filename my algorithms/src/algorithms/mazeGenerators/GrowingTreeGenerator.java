@@ -1,14 +1,15 @@
 package algorithms.mazeGenerators;
-/**
-* Generator to launch a 3d maze using a growing tree algorithm
-* @author Wasim, Roaa
-*
-*/
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+* Generator to launch a 3d maze using a growing tree algorithm
+* @author Wasim, Roaa
+*
+*/
 public class GrowingTreeGenerator extends CommonMaze3dGenerator{
 	
 	Chooser chooser;
@@ -33,8 +34,8 @@ public class GrowingTreeGenerator extends CommonMaze3dGenerator{
 		Random ran = new Random();
 		int myX  = ran.nextInt(x-2)+1;
 		int myY = ran.nextInt(y-2)+1;
-		//int myZ = ran.nextInt(z-2)+1;
-		Position cell = new Position(myX,myY,1);
+		int myZ = ran.nextInt(z-2)+1;
+		Position cell = new Position(myX,myY,myZ);
 		C.addLast(cell);
 		maze.setMaze3d(cell, 0);
 		while(! C.isEmpty()){
@@ -44,7 +45,9 @@ public class GrowingTreeGenerator extends CommonMaze3dGenerator{
 			if(!unvisitedNeighbors.isEmpty()){
 				Collections.shuffle(unvisitedNeighbors); //to choose random neighbor
 				Position n = unvisitedNeighbors.get(0);
-				maze.setMaze3d(n.getPassage(), 0);
+				if(n.getPassage() != null){ //if the neighbor is on the same floor move two steps
+					maze.setMaze3d(n.getPassage(), 0);
+				}
 				maze.setMaze3d(n, 0);
 				C.addLast(n); // add n to C
 			} else {
@@ -52,17 +55,6 @@ public class GrowingTreeGenerator extends CommonMaze3dGenerator{
 			}
 		}
 		
-		/*for(int i=0; i<z; i++){
-			System.out.println("{");
-			for(int j=0; j<x; j++){
-				for(int k=0; k<y; k++){
-					System.out.print(maze.GetMaze3d(new Position(j, k, i)));
-				}
-				System.out.println();
-			}
-			System.out.print("}");
-			System.out.println();
-		}*/
 		//Set entrance at ground floor randomly
 		LinkedList<Position> openCells = maze.openCells(1); //return open cells at first floor
 		Collections.shuffle(openCells);

@@ -16,12 +16,12 @@ public class Demo {
 	private static void run(Maze3dGenerator mg)
 	{
 		
-		SearchableAdapter maze = new SearchableAdapter(mg.generate(9, 9, 9));
+		SearchableAdapter maze = new SearchableAdapter(mg.generate(7, 7, 7));
 		
-		for(int i=0; i<11; i++){
+		for(int i=0; i<9; i++){
 			System.out.println("{");
-			for(int j=0; j<11; j++){
-				for(int k=0; k<11; k++){
+			for(int j=0; j<9; j++){
+				for(int k=0; k<9; k++){
 					System.out.print(maze.getM3d().GetMaze3d(new Position(j, k, i)));
 				}
 				System.out.println();
