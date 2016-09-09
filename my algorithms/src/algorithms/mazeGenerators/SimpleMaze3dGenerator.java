@@ -14,6 +14,7 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 	public Maze3d generate(int x, int y, int z) {
 		
 		Maze3d simpleMaze = new Maze3d(x, y, z);
+		//Update the size of rows columns and floors
 		x = x + 2;
 		y = y + 2;
 		z = z + 2;
