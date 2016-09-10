@@ -32,6 +32,42 @@ public class Maze3d {
 			}
 		}
 	}
+
+	/**
+	 * Constructor to create a new maze from a byte array
+	 */
+	public Maze3d(byte[] arr){
+		int index = 9;
+		int z = arr[0];
+		int y = arr[1];
+		int x = arr[2];
+		Position entrancePos = new Position(z,y,x);
+		setEntrance(entrancePos);
+		
+		z = arr[3];
+		y = arr[4];
+		x = arr[5];
+		Position exitPos = new Position(z,y,x);
+		
+		setExit(exitPos);
+		
+		this.z = arr[6];
+		this.x = arr[7];
+		this.y = arr[8];
+		
+		maze3d = new int[z][x][y];
+		
+		for(int i=0; i<z;i++){
+			for(int j=0;j<x;j++){
+				for(int k=0;k<y;k++){
+					maze3d[i][j][k] = arr[index];
+					index++;
+					
+				}
+			}
+		}
+		
+	}
 	
 	public void setEntrance(Position p){
 		entrance = p;
@@ -259,4 +295,38 @@ public class Maze3d {
 		//System.out.println("Open Cells are: "+openCells.size());
 		return openCells;
 	}
+	
+	/**
+	 * Method to return the maze information as byte array
+	 * @return byte[]
+	 */
+	public byte[] toByteArray(){
+		ArrayList<Byte> list = new ArrayList<Byte>();
+		list.add((byte)entrance.getZ()); // add entrance position
+		list.add((byte)entrance.getX());
+		list.add((byte)entrance.getY());
+		list.add((byte)exit.getZ()); // add exit position
+		list.add((byte)exit.getX());
+		list.add((byte)exit.getY());
+		list.add((byte)z); // add floors
+		list.add((byte)x); // add rows
+		list.add((byte)y); // add columns
+		
+		// add the maze integers to the list
+		for(int i=0; i<z;i++){
+			for(int j=0;j<x;j++){
+				for(int k=0;k<y;k++){
+					list.add((byte)maze3d[i][j][k]);
+				}
+			}
+		}
+	
+		byte[] bytes = new byte[list.size()];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = (byte)list.get(i);
+		}
+		return bytes;
+	}
+
+	
 }
