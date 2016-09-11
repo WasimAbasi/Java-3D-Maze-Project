@@ -43,14 +43,12 @@ public class Maze3d {
 		int y = arr[1];
 		int z = arr[2];
 		Position entrancePos = new Position(x,y,z);
-		setEntrance(entrancePos);
 		
 		//Load the exit to the maze
 		x = arr[3];
 		y = arr[4];
 		z = arr[5];
 		Position exitPos = new Position(x,y,z);
-		setExit(exitPos);
 		
 		//Load the maze dimensions
 		this.x = arr[6];
@@ -58,7 +56,9 @@ public class Maze3d {
 		this.z = arr[8];
 		
 		//Create the maze
-		maze3d = new int[x][y][z];
+		maze3d = new int[this.x][this.y][this.z];
+		setEntrance(entrancePos);
+		setExit(exitPos);
 		
 		//Load the maze's cells
 		int index = 9;
@@ -106,6 +106,26 @@ public class Maze3d {
 	}
 	public int getZ(){
 		return z;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		Maze3d maze = (Maze3d) o;
+		if(maze.getX()!=x || maze.getY()!=y || maze.getZ()!=z)
+			return false;
+		if(!maze.getStartPosition().equals(entrance))
+			return false;
+		if(!maze.getGoalPosition().equals(exit))
+			return false;
+		for(int i=0; i<x; i++){
+			for(int j=0; j<y; j++){
+				for(int k=0; k<z; k++){
+					if(maze.GetMaze3d(new Position(i, j, k)) != maze3d[i][j][k])
+						return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public int[][] getCrossSectionByX(int x) throws IndexOutOfBoundsException {
