@@ -1,62 +1,68 @@
 package model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+/**
+ * Interface Model represents the functionality of a model as a component of the MVC pattern.
+ * @author Wasim, Roaa
+ *
+ */
 public interface Model
 {
-	/** 
-	 * open all the files from the path dir
-	 * @param dir the path of files we want to open
-	 */
-	public void dir(File dir);
 	/**
-	 * bring us the maze2d on the place we want and index
-	 * @param name of the maze3d
-	 * @param index the row/column/floor from the maze3d we want to bring
-	 * @param place x/y/z what sector
+	 * Method generateMaze generates a three dimensional maze using the algorithm specified by the user
+	 * @param name
+	 * @param x: number of rows
+	 * @param y: number of columns
+	 * @param z: number of floors
+	 * @param algorithm: SimpleMaze3dGenerator or GrowingTreeGenerator
 	 */
-	public void getCrossBY(String name, int index,char place);
+	public void generateMaze(String name, int x, int y, int z, String algorithm);
+	
 	/**
-	 * generate maze3d with the sizes we want
-	 * @param name of maze3d we want to generate
-	 * @param x size of x sector
-	 * @param y size of y sector
-	 * @param z size of z sector
-	 * @param algo algorithm to build maze
-	 */
-	public void generateM3d(String name,int x,int y,int z, String algo);
-	/**
-	 * display the maze we want 
-	 * @param name of the maze3d we want to display
+	 * method display displays the maze with the name specified by the user.
+	 * @param name: the name of the maze to display
 	 */
 	public void display(String name);
+	
 	/**
-	 * save the maze3d we want into file
-	 * @param name of maze3d we want to save
-	 * @param fos the file we want to save in
+	 * Method displayCrossSection displays a cross section by axis in a specific maze.
+	 * @param index: index to cross by
+	 * @param section: X, Y or Z
+	 * @param name: the name of the maze
 	 */
-	public void saveM3d(String name,FileOutputStream fos);
+	public void displayCrossSection(int index, char section, String name);
+
 	/**
-	 * load maze3d from file that have it
-	 * @param fis the file we want to load from
-	 * @param name of maze3d to load
+	 * Method saveMaze save the maze to a file
+	 * @param name: the name of the maze to save
+	 * @param fileName: file's name to save the maze in
 	 */
-	public void loadM3d(FileInputStream fis, String name);
+	public void saveMaze(String name, String fileName);
+	
 	/**
-	 * bring us the solve of the maze we want
-	 * @param name of maze3d we want to solve
-	 * @param algo algorithm to solve maze by
+	 * Method loadMaze loads a maze from an input file
+	 * @param fileName: file's name to load from
+	 * @param name: the name of the maze to load
 	 */
-	public void solveM3d(String name, String algo);
+	public void loadMaze(String fileName, String name)throws IOException, FileNotFoundException;
+	
 	/**
-	 * display the solution for the maze we want
-	 * @param name of Maze3d we want to solve
+	 * Method solveMaze solves the specified maze using the specified algorithm.
+	 * @param name: the name of the maze to solve
+	 * @param algorithm: BFS or DFS
+	 */
+	public void solveMaze(String name, String algorithm);
+	
+	/**
+	 * Method displaySolution displays the solution for the specified maze
+	 * @param name: the name of the specified maze
 	 */
 	public void displaySolution(String name);
+	
 	/**
-	 * exit from the project
+	 * Method exit performs a safe exit from the user interface.
 	 */
 	public void exit();
 }

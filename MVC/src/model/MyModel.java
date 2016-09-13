@@ -1,35 +1,28 @@
 package model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.HashMap;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
+import controller.MyController;
 
+/**
+ * Class MyModel implements Interface Model
+ * @author Wasim, Roaa
+ *
+ */
 public class MyModel implements Model{
-
-	@Override
-	public void dir(File dir) {
-		String [] arr;
-		 if(dir.exists())
-		 {
-			 arr = dir.list();
-		 }
-		 else
-		 {
-//			 "The path " + dir.getPath() + " is not exists";
-		 }
+	
+	MyController controller;
+	
+	public MyModel(MyController controller){
+		this.controller = controller;
 	}
-
+	
 	@Override
-	public void getCrossBY(String name, int index, char place) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generateM3d(String name, int x, int y, int z, String algo) {
+	public void generateMaze(String name, int x, int y, int z, String algorithm) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -39,20 +32,26 @@ public class MyModel implements Model{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void saveM3d(String name, FileOutputStream fos) {
+	public void displayCrossSection(int index, char section, String name) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void loadM3d(FileInputStream fis, String name) {
+	public void saveMaze(String name, String fileName){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loadMaze(String fileName, String name)throws IOException, FileNotFoundException {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void solveM3d(String name, String algo) {
+	public void solveMaze(String name, String algorithm) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -67,5 +66,30 @@ public class MyModel implements Model{
 	public void exit() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Maze3d getMaze(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int[][] getMazeSection(String name, char section, int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getMazeSectionLength(String name, char section, int index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getMazeSectionWidth(String name, char section, int index) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Solution<Position> getSolution(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

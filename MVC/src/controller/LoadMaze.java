@@ -1,24 +1,32 @@
 package controller;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import model.MyModel;
+import java.io.IOException;
 
+import model.MyModel;
+import view.MyView;
+
+/**
+ * Class LoadMaze executes the command for loading the maze from a specific file.
+ * @author Roaa, Wasim
+ *
+ */
 public class LoadMaze implements Command {
 
-	private MyModel m;
+	private MyModel model;
+	private MyView view;
 	
-	public LoadMaze(MyModel m) {
-		this.m = m;
+	public LoadMaze(MyModel model, MyView view) {
+		this.model = model;
+		this.view = view;
 	}
 	
 	@Override
-	public void doCommand(String[] st) {
-		try {
-			m.loadM3d(new FileInputStream(st[1]), st[2]);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void doCommand(String[] commandParameters) {
+		try{
+			model.loadMaze(commandParameters[1] , commandParameters[2]);
+			view.message("Maze " + commandParameters[1] + " has been succefully loaded!");
+		}catch(IOException e){
+			view.error("Error occured while loading the file!");
 		}
 	}
 

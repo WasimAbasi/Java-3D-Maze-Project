@@ -14,16 +14,17 @@ import controller.Command;
  */
 public class CLI{
 	
-	protected BufferedReader in;
-	protected PrintWriter out;
-	protected HashMap<String,Command> commands;
+	private BufferedReader in;
+	private PrintWriter out;
+	private HashMap<String,Command> commands;
 
 	//the user supplies an input stream, output stream and a list of commands
 	public CLI(BufferedReader in, PrintWriter out, HashMap<String,Command> commands) {
 		this.in = in;
 		this.out = out;
-		this.commands = new HashMap<String,Command>();
-		this.commands.putAll(commands);
+		/*this.commands = new HashMap<String,Command>();
+		this.commands.putAll(commands);*/
+		this.commands = commands;
 	}
 
 	public void start(){
@@ -31,9 +32,8 @@ public class CLI{
 			@Override
 			public void run()
 			{
-				Scanner s;
-				String [] choice = new String[10]; //The largest string is less than 10 characters.
-				int i = 0;
+				Scanner scanner;
+				String [] command = new String[10]; //The largest command including parameters is less than 10 strings.
 
 				do{
 					System.out.println("Please enter a command:");
@@ -47,25 +47,28 @@ public class CLI{
 					System.out.println("- display_solution <name>");
 					System.out.println("- exit");
 
+					int i = 0;
 					try{
-						s= new Scanner(in.readLine());
-						s.useDelimiter(" ");
-						while(s.hasNext())
+						scanner = new Scanner(in.readLine());
+						scanner.useDelimiter(" ");
+						while(scanner.hasNext())
 						{
-							choice[i] = s.next();
+							command[i] = scanner.next();
 							i++;
 						}
-
-						if(commands.containsKey(choice[0]))
+						if(commands.containsKey(command[0]))
 						{
-							commands.get(choice[0]).doCommand(choice);
+							commands.get(command[0]).doCommand(command);
+						}
+						else
+						{
+							out.println("Invalid Command. Please try again.");
 						}
 					}catch(IOException e)
 					{
-						out.println("Invalid Command!");
+						e.printStackTrace();
 					}
-					i=0;
-				}while(choice[0] != "exit");
+				}while(command[0] != "exit");
 
 			}
 		}).start();
