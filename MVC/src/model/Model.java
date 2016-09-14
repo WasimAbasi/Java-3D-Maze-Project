@@ -3,6 +3,10 @@ package model;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
+
 /**
  * Interface Model represents the functionality of a model as a component of the MVC pattern.
  * @author Wasim, Roaa
@@ -13,26 +17,18 @@ public interface Model
 	/**
 	 * Method generateMaze generates a three dimensional maze using the algorithm specified by the user
 	 * @param name
-	 * @param x: number of rows
-	 * @param y: number of columns
-	 * @param z: number of floors
+	 * @param rows: number of rows
+	 * @param columns: number of columns
+	 * @param floors: number of floors
 	 * @param algorithm: SimpleMaze3dGenerator or GrowingTreeGenerator
 	 */
-	public void generateMaze(String name, int x, int y, int z, String algorithm);
+	public void generateMaze(String name, int rows, int columns, int floors, String algorithm);
 	
 	/**
-	 * method display displays the maze with the name specified by the user.
-	 * @param name: the name of the maze to display
+	 * method getMaze returns the maze of the name specified by the user.
+	 * @param name: the name of the maze to return
 	 */
-	public void display(String name);
-	
-	/**
-	 * Method displayCrossSection displays a cross section by axis in a specific maze.
-	 * @param index: index to cross by
-	 * @param section: X, Y or Z
-	 * @param name: the name of the maze
-	 */
-	public void displayCrossSection(int index, char section, String name);
+	public Maze3d getMaze(String name);
 
 	/**
 	 * Method saveMaze save the maze to a file
@@ -56,13 +52,22 @@ public interface Model
 	public void solveMaze(String name, String algorithm);
 	
 	/**
-	 * Method displaySolution displays the solution for the specified maze
+	 * Method getSolution returns the solution for the specified maze
 	 * @param name: the name of the specified maze
 	 */
-	public void displaySolution(String name);
+	public Solution<Position> getSolution(String name);
 	
 	/**
 	 * Method exit performs a safe exit from the user interface.
 	 */
 	public void exit();
+
+	/**
+	 * Method getMazeSection
+	 * @param name: the name of the maze to cross
+	 * @param section: the section of the maze to cross: x, y or z
+	 * @param index: index to cross by
+	 * @return a two dimensional cross section of the maze
+	 */
+	int[][] getMazeSection(String name, char section, int index);
 }

@@ -74,13 +74,15 @@ public class MyView implements View {
 		
 	}
 
-	public void error(String string) {
-		// TODO Auto-generated method stub
+	@Override
+	public void error(String errorMessage) {
+		System.out.println(errorMessage);
 		
 	}
 
-	public void message(String string) {
-		// TODO Auto-generated method stub
+	@Override
+	public void message(String message) {
+		System.out.println(message);
 		
 	}
 

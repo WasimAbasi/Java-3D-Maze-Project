@@ -10,5 +10,9 @@ public interface Controller {
 	public void start();
 
 	void initiateCommands();
+
+	void error(String errorMessage);
+
+	void message(String message);
 	
 }

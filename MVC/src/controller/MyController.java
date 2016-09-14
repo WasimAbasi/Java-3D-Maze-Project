@@ -44,4 +44,16 @@ public class MyController implements Controller {
 		view.start();	
 	}
 
+	@Override
+	public void error(String errorMessage) {
+		view.error(errorMessage);
+		
+	}
+
+	@Override
+	public void message(String message) {
+		view.message(message);
+		
+	}
+
 }

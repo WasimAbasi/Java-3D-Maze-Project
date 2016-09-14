@@ -42,4 +42,16 @@ public interface View {
 	 * Method displaySolution displays a solution for a maze specified by the user.
 	 */
 	public void displaySolution(Solution<Position> solution);
+
+	/**
+	 * Method error displays an error message to the user.
+	 * @param errorMessage
+	 */
+	void error(String errorMessage);
+
+	/**
+	 * Method message displays a message to the user.
+	 * @param message
+	 */
+	void message(String message);
 }
