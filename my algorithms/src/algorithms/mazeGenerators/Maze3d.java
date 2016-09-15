@@ -236,11 +236,7 @@ public class Maze3d {
 		if (c.getZ()+1 >= z-1 || maze3d[c.getX()][c.getY()][c.getZ()+1] != 1){
 			return null;
 		}
-		/*if (c.getZ()+2 >= z-1 || maze3d[c.getX()][c.getY()][c.getZ()+2] != 1){
-			return null;
-		}*/
 		Position up = new Position(c.getX(), c.getY(), c.getZ()+1);
-		//up.setPassage(new Position(c.getX(), c.getY(), c.getZ()+1));
 		return up;
 	}
 	
@@ -248,11 +244,7 @@ public class Maze3d {
 		if (c.getZ()-1 <= 0 || maze3d[c.getX()][c.getY()][c.getZ()-1] != 1){
 			return null;
 		}
-		/*if (c.getZ()-2 <= 0 || maze3d[c.getX()][c.getY()][c.getZ()-2] != 1){
-			return null;
-		}*/
 		Position down = new Position(c.getX(), c.getY(), c.getZ()-1);
-		//down.setPassage(new Position(c.getX(), c.getY(), c.getZ()-1));
 		return down;
 	}
 	
@@ -311,11 +303,9 @@ public class Maze3d {
 				Position p = new Position(i, j, floor);
 				if(GetMaze3d(p) == 0){ //open cell
 					openCells.add(p);
-					//System.out.println(p);
 				}
 			}
 		}
-		//System.out.println("Open Cells are: "+openCells.size());
 		return openCells;
 	}
 	

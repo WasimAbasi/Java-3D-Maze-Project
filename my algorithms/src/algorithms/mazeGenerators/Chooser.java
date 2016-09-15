@@ -10,5 +10,4 @@ import java.util.LinkedList;
 
 public interface Chooser {
 	Position choose(LinkedList<Position> C);
-//	Test123
 }

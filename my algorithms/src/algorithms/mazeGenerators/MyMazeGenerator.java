@@ -17,16 +17,18 @@ public class MyMazeGenerator extends CommonMaze3dGenerator{
 		simpleMaze.setEntrance(entrance);
 		
 		for(int floor = 1; floor<z-1; floor +=2){
-			for(int i=1; i<z-1; i++){
+			for(int i=1; i<y-1; i++){
 				simpleMaze.setMaze3d(new Position(1, i, floor), 0);
-				simpleMaze.setMaze3d(new Position(i, z-2, floor), 0);
+			}
+			for(int i=1; i<x-1; i++){
+				simpleMaze.setMaze3d(new Position(i, y-2, floor), 0);
 			}
 		}
 		
 		int flag = 0;
 		for(int floor = 2; floor<z-1; floor +=2){
 			if(flag == 0){
-				simpleMaze.setMaze3d(new Position(z-2,z-2,floor), 0);
+				simpleMaze.setMaze3d(new Position(x-2,y-2,floor), 0);
 				flag = 1;
 			}
 			else{
@@ -36,7 +38,7 @@ public class MyMazeGenerator extends CommonMaze3dGenerator{
 		}
 
 		//set exit
-		Position exit = new Position(z-2, z-2, z-1);
+		Position exit = new Position(x-2, y-2, z-1);
 		simpleMaze.setMaze3d(exit, 0);
 		simpleMaze.setExit(exit);
 
