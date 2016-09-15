@@ -1,14 +1,14 @@
 package controller;
 
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 public class DisplayCrossSection implements Command {
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public DisplayCrossSection(MyModel model, MyView view) {
+	public DisplayCrossSection(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

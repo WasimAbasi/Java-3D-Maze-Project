@@ -2,8 +2,8 @@ package controller;
 
 import java.io.IOException;
 
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class LoadMaze executes the command for loading the maze from a specific file.
@@ -12,10 +12,10 @@ import view.MyView;
  */
 public class LoadMaze implements Command {
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public LoadMaze(MyModel model, MyView view) {
+	public LoadMaze(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

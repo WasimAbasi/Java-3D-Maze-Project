@@ -1,7 +1,7 @@
 package controller;
 
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class SaveMaze executes the command of saving the specified maze to a file.
@@ -10,10 +10,10 @@ import view.MyView;
  */
 public class SaveMaze implements Command {
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public SaveMaze(MyModel model, MyView view) {
+	public SaveMaze(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

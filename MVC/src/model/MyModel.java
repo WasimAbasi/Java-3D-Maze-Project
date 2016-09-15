@@ -197,6 +197,7 @@ public class MyModel implements Model{
 		}
 	}
 
+	@Override
 	public int getMazeSectionLength(String name, char section) {
 		Maze3d maze = nameToMazeMap.get(name);
 		if(maze != null){
@@ -212,6 +213,7 @@ public class MyModel implements Model{
 		return -1;
 	}
 
+	@Override
 	public int getMazeSectionWidth(String name, char section) {
 		Maze3d maze = nameToMazeMap.get(name);
 		if(maze != null){

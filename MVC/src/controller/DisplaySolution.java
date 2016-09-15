@@ -2,8 +2,8 @@ package controller;
 
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class DisplaySolution displays the solution to a specific maze.
@@ -12,10 +12,10 @@ import view.MyView;
  */
 public class DisplaySolution implements Command {
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public DisplaySolution(MyModel model, MyView view) {
+	public DisplaySolution(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

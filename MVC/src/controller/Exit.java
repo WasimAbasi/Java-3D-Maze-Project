@@ -1,6 +1,6 @@
 package controller;
 
-import model.MyModel;
+import model.Model;
 
 /**
  * Class exits executes the command exit which performs a safe exit from the command line interface.
@@ -9,9 +9,9 @@ import model.MyModel;
  */
 public class Exit implements Command {
 
-	private MyModel model;
+	private Model model;
 	
-	public Exit(MyModel model) {
+	public Exit(Model model) {
 		this.model = model;
 	}
 

@@ -1,8 +1,9 @@
 package controller;
 
 import java.util.HashMap;
-import model.MyModel;
-import view.MyView;
+
+import model.Model;
+import view.View;
 
 /**
  * Class MyController represents a controller which implements the controller side of the MVC pattern.
@@ -11,11 +12,11 @@ import view.MyView;
  */
 public class MyController implements Controller {
 	
-	MyView view;
-	MyModel model;
+	View view;
+	Model model;
 	HashMap<String,Command> commands;
 	
-	public MyController(MyView view, MyModel model) {
+	public MyController(View view, Model model) {
 		this.view = view;
 		this.model = model;
 		initiateCommands();
@@ -32,7 +33,7 @@ public class MyController implements Controller {
 		commands.put("display_cross_section", new DisplayCrossSection(this.model, this.view)); 
 		commands.put("save_maze", new SaveMaze(this.model, this.view));	
 		commands.put("load_maze", new LoadMaze(this.model, this.view));
-		commands.put("solve", new Solve(this.model)); 
+		commands.put("solve", new Solve(this.model, this.view)); 
 		commands.put("display_solution", new DisplaySolution(this.model, this.view));
 		commands.put("exit", new Exit(this.model));
 	}

@@ -1,8 +1,8 @@
 package controller;
 
 import algorithms.mazeGenerators.Maze3d;
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class Display displays the maze ordered by the user.
@@ -11,10 +11,10 @@ import view.MyView;
  */
 public class Display implements Command {
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public Display(MyModel model, MyView view) {
+	public Display(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

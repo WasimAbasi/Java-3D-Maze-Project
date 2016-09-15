@@ -1,7 +1,7 @@
 package controller;
 
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class GenerateMaze executes the command of generating a new maze using
@@ -11,12 +11,12 @@ import view.MyView;
  */
 public class GenerateMaze implements Command{
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	String[] commandParameters;	
 	Thread thread;
 	
-	public GenerateMaze(MyModel model, MyView view) {
+	public GenerateMaze(Model model, View view) {
 		this.model = model;
 		this.view = view;
 	}

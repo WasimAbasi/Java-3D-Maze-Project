@@ -1,6 +1,6 @@
 package controller;
 
-import view.MyView;
+import view.View;
 
 /**
  * Class Dir defines a dir command which displays all files and directories under
@@ -10,9 +10,9 @@ import view.MyView;
  */
 public class Dir implements Command {
 	
-	MyView view;
+	View view;
 	
-	public Dir(MyView view) {
+	public Dir(View view) {
 		this.view = view;
 	}
 

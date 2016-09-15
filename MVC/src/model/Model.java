@@ -77,4 +77,18 @@ public interface Model
 	 * @param controller
 	 */
 	void SetController(MyController controller);
+
+	/**
+	 * Method getMazeSectionWidth returns the number of columns in the specified section.
+	 * @param name
+	 * @param section
+	 */
+	int getMazeSectionWidth(String name, char section);
+
+	/**
+	 * Method getMazeSectionLength returns the number of rows in the specified section.
+	 * @param name
+	 * @param section
+	 */
+	int getMazeSectionLength(String name, char section);
 }

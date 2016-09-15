@@ -1,7 +1,7 @@
 package controller;
 
-import model.MyModel;
-import view.MyView;
+import model.Model;
+import view.View;
 
 /**
  * Class Solve executes the command of solving the specified maze.
@@ -10,11 +10,12 @@ import view.MyView;
  */
 public class Solve implements Command{
 
-	private MyModel model;
-	private MyView view;
+	private Model model;
+	private View view;
 	
-	public Solve(MyModel model) {
+	public Solve(Model model, View view) {
 		this.model = model;
+		this.view = view;
 	}
 
 	@Override
