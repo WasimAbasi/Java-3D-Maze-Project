@@ -19,15 +19,22 @@ public class MyView implements View {
 
 	CLI cli;
 	PrintWriter out;
+	BufferedReader in;
+	HashMap<String, Command> commands;
 	
-	public MyView(BufferedReader in, PrintWriter out, HashMap<String,Command> commands) {
-		super();
+	public MyView(BufferedReader in, PrintWriter out) {
 		this.out = out;
-		this.cli = new CLI(in, out, commands);
+		this.in = in;
+	}
+	
+	@Override
+	public void setCommands(HashMap<String, Command> commands){
+		this.commands = commands;
 	}
 
 	@Override
 	public void start() {
+		this.cli = new CLI(in, out, commands);
 		cli.start();
 	}
 
@@ -37,10 +44,11 @@ public class MyView implements View {
 		File[] listFiles = f.listFiles();
 		for (File file : listFiles) {
 			if( (file.isFile()) || (file.isDirectory()) ){
-				this.out.println(file.getName());
+				out.println(file.getName());
 			}
 			else{
-				this.out.println("Error with path");
+				out.println("Error with path");
+				out.flush();
 			}
 		}	
 	}
@@ -51,39 +59,46 @@ public class MyView implements View {
 			for (int j = 0; j < maze.getX(); j++) {
 				for (int k = 0; k < maze.getY(); k++) {
 					out.print(maze.GetMaze3d(new Position(j, k, i)));
+					out.flush();
 				}
 				out.println();
+				out.flush();
 			}
 			out.println();
+			out.flush();
 		}
 	}
 
 	@Override
 	public void displayCrossSection(int[][] section, int length, int width) {
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < length; j++) {	
-				System.out.print(section[i][j]);
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < width; j++) {	
+				out.print(section[i][j]);
+				out.flush();
 			}
-			System.out.println();
+			out.println();
+			out.flush();
 		}
 	}
 
 	@Override
 	public void displaySolution(Solution<Position> solution) {
-		solution.toString();
+		out.print(solution.toString());
+		out.flush();
 		
 	}
 
 	@Override
 	public void error(String errorMessage) {
-		System.out.println(errorMessage);
+		out.println(errorMessage);
+		out.flush();
 		
 	}
 
 	@Override
 	public void message(String message) {
-		System.out.println(message);
-		
+		out.println(message);
+		out.flush();
 	}
 
 }

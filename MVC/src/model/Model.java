@@ -6,6 +6,7 @@ import java.io.IOException;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import controller.MyController;
 
 /**
  * Interface Model represents the functionality of a model as a component of the MVC pattern.
@@ -70,4 +71,10 @@ public interface Model
 	 * @return a two dimensional cross section of the maze
 	 */
 	int[][] getMazeSection(String name, char section, int index);
+
+	/**
+	 * Method stController sets the controller for interaction with the view.
+	 * @param controller
+	 */
+	void SetController(MyController controller);
 }

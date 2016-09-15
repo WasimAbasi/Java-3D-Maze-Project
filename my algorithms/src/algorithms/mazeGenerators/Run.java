@@ -9,9 +9,9 @@ public class Run {
 	
 	private static void testMazeGenerator(Maze3dGenerator mg){
 		// prints the time it takes the algorithm to run
-		System.out.println(mg.measureAlgorithmTime(9, 9, 9));
+		System.out.println(mg.measureAlgorithmTime(7, 7, 7));
 		// generate another 3d maze
-		Maze3d maze=mg.generate(9, 9, 9);
+		Maze3d maze=mg.generate(7, 7, 7);
 		// get the maze entrance
 		Position p=maze.getStartPosition();
 		// print the position
@@ -26,22 +26,22 @@ public class Run {
 		try{
 			// get 2d cross sections of the 3d maze
 			int[][] maze2dx=maze.getCrossSectionByX(2);
-			for(int i=0; i<11; i++){
-				for(int j=0; j<11; j++){
+			for(int i=0; i<9; i++){
+				for(int j=0; j<9; j++){
 					System.out.print(maze2dx[i][j]);
 				}
 				System.out.println();
 			}
 			int[][] maze2dy=maze.getCrossSectionByY(5);
-			for(int i=0; i<11; i++){
-				for(int j=0; j<11; j++){
+			for(int i=0; i<9; i++){
+				for(int j=0; j<9; j++){
 					System.out.print(maze2dy[i][j]);
 				}
 				System.out.println();
 			}
 			int[][] maze2dz=maze.getCrossSectionByZ(0);
-			for(int i=0; i<11; i++){
-				for(int j=0; j<11; j++){
+			for(int i=0; i<9; i++){
+				for(int j=0; j<9; j++){
 					System.out.print(maze2dz[i][j]);
 				}
 				System.out.println();

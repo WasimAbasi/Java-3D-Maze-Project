@@ -8,12 +8,10 @@ import view.MyView;
  * @author Roaa, Wasim
  *
  */
-public class Solve implements Command, Runnable{
+public class Solve implements Command{
 
 	private MyModel model;
 	private MyView view;
-	Thread thread;
-	String[] commandParameters;
 	
 	public Solve(MyModel model) {
 		this.model = model;
@@ -21,20 +19,17 @@ public class Solve implements Command, Runnable{
 
 	@Override
 	public void doCommand(String[] commandParameters) {
-		if( (model.getMaze(commandParameters[1]) != null) && (commandParameters[2].equals("bfs") || commandParameters[2].equals("dfs")) ){
-			this.commandParameters = commandParameters;
-			thread = new Thread(this);
-			thread.start();
-		}
-		else{
+		try {
+			if( (model.getMaze(commandParameters[1]) != null) && 
+					(commandParameters[2].toLowerCase().equals("bfs") || commandParameters[2].toLowerCase().equals("dfs")) ){
+				model.solveMaze(commandParameters[1] , commandParameters[2]);
+			}
+			else{
+				view.error("Invalid Parameters!");
+			}
+		} catch (Exception e) {
 			view.error("Invalid Parameters!");
 		}
-	}
-	
-	@Override
-	public void run() {
-		model.solveMaze(commandParameters[1] , commandParameters[2]);
-		view.message("Solution for maze " + commandParameters[1] + "- is ready!");	
 	}
 
 }

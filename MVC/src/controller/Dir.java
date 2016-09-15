@@ -23,12 +23,15 @@ public class Dir implements Command {
 				String path = commandParameters[1];
 				view.dir(path);
 			}
+			else{
+				view.error("Invalid Argument!");
+			}
 
 		} catch (ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			view.error(e.getMessage());
 		}
 		catch(NullPointerException e){
-			e.printStackTrace();
+			view.error(e.getMessage());
 		}
 	}
 }

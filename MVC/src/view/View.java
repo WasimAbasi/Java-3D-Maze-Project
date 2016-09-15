@@ -1,8 +1,11 @@
 package view;
 
+import java.util.HashMap;
+
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import controller.Command;
 
 /**
  * Interface View represents the functionality of a View as a part of the MVC pattern.
@@ -54,4 +57,10 @@ public interface View {
 	 * @param message
 	 */
 	void message(String message);
+
+	/**
+	 * Method setCommands sets the commands map to commands.
+	 * @param commands
+	 */
+	void setCommands(HashMap<String, Command> commands);
 }

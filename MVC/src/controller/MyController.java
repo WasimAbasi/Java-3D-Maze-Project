@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import model.MyModel;
 import view.MyView;
@@ -17,16 +15,16 @@ public class MyController implements Controller {
 	MyModel model;
 	HashMap<String,Command> commands;
 	
-	public MyController(BufferedReader in, PrintWriter out) {
-		super();
+	public MyController(MyView view, MyModel model) {
+		this.view = view;
+		this.model = model;
 		initiateCommands();
-		this.view = new MyView(in, out, this.commands);
-		this.model = new MyModel(this);
+		this.view.setCommands(commands);
 	}
 	
 	@Override
 	public void initiateCommands() {
-		this.commands = new HashMap<String,Command>();
+		commands = new HashMap<String,Command>();
 		
 		commands.put("dir", new Dir(this.view));	
 		commands.put("generate_maze", new GenerateMaze(this.model, this.view));   
@@ -37,11 +35,6 @@ public class MyController implements Controller {
 		commands.put("solve", new Solve(this.model)); 
 		commands.put("display_solution", new DisplaySolution(this.model, this.view));
 		commands.put("exit", new Exit(this.model));
-	}
-
-	@Override
-	public void start() {
-		view.start();	
 	}
 
 	@Override

@@ -1,51 +1,29 @@
 package boot;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.HashMap;
 
-import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
-import algorithms.mazeGenerators.SimpleMaze3dGenerator;
-import algorithms.search.BestFirstSearch;
-import algorithms.demo.SearchableAdapter;
-import algorithms.search.Solution;
+import controller.*;
 import model.MyModel;
 import view.MyView;
-import view.CLI;
-import controller.*;
 
 public class Run {
 
-	public static void main(String[] args) throws IOException
-	{
-		new File("MyMaze");
+	public static void main(String[] args){
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
+	
+		MyView view = new MyView(in, out);
 		
-		MyModel mm = new MyModel();
-		HashMap<String,Command> hm = new HashMap<String,Command>();
+		MyModel model = new MyModel();
 		
-		hm.put("Dir", new Dir(mm));
-		hm.put("Generate3DMaze", new GenerateMaze(mm));
-		hm.put("Display", new Display(mm));
-		hm.put("DisplayCrossSectionBy", new DisplayCrossSection(mm));
-		hm.put("SaveMaze", new SaveMaze(mm));
-		hm.put("LoadMaze", new LoadMaze(mm));
-		hm.put("Solve", new Solve(mm));
-		hm.put("DisplaySolution", new DisplaySolution(mm));
-		hm.put("Exit", new Exit(mm));
+		MyController controller = new MyController(view, model);
 		
-		MyView mv = new MyView(in, out, hm);
+		model.SetController(controller);
 		
-		MyController c = new MyController(mv, mm, hm);
-		mv.setController(c);
-		
-		c.getMv().start();
+		view.start();
 		
 	}
 }

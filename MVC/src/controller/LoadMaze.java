@@ -24,7 +24,7 @@ public class LoadMaze implements Command {
 	public void doCommand(String[] commandParameters) {
 		try{
 			model.loadMaze(commandParameters[1] , commandParameters[2]);
-			view.message("Maze " + commandParameters[1] + " has been succefully loaded!");
+			view.message("Maze " + commandParameters[2] + " has been succefully loaded!");
 		}catch(IOException e){
 			view.error("Error occured while loading the file!");
 		}

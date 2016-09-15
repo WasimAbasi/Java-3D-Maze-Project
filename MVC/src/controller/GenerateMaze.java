@@ -9,7 +9,7 @@ import view.MyView;
  * @author Roaa, Wasim
  *
  */
-public class GenerateMaze implements Command, Runnable {
+public class GenerateMaze implements Command{
 
 	private MyModel model;
 	private MyView view;
@@ -22,20 +22,13 @@ public class GenerateMaze implements Command, Runnable {
 	}
 
 	@Override
-	public void run() {
+	public void doCommand(String[] commandParameters) {
+
 		try {
 			model.generateMaze(commandParameters[1], Integer.parseInt(commandParameters[2]), Integer.parseInt(commandParameters[3]), 
 					Integer.parseInt(commandParameters[4]), commandParameters[5]);
-			view.message("Maze " + commandParameters[1] + " is ready!");
 		} catch (ArrayIndexOutOfBoundsException e) {
-			view.error("Index Out Of Bounds!");
+			view.error("Incorrect Parameters!");
 		}
-	}
-	
-	@Override
-	public void doCommand(String[] commandParameters) {
-		this.commandParameters = commandParameters;
-		thread = new Thread(this);
-		thread.start();
 	}
 }

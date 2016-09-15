@@ -28,38 +28,47 @@ public class MyModel implements Model{
 
 	private HashMap<String, Maze3d> nameToMazeMap;
 	private HashMap<String, Solution<Position>> nameToSolutionMap;
-	private HashMap<String, String> nameToFileNameMap;
 
 	private MyCompressorOutputStream out;
 	private MyDecompressorInputStream in;
 
 	MyController controller;
 
-	public MyModel(MyController controller){
+	public MyModel(){
 		this.nameToMazeMap = new HashMap<String, Maze3d>();
 		this.nameToSolutionMap = new HashMap<String, Solution<Position>>();
-		this.nameToFileNameMap = new HashMap<String, String>();
+	}
+	
+	@Override
+	public void SetController(MyController controller){
 		this.controller = controller;
 	}
 
 	@Override
 	public void generateMaze(String name, int rows, int columns, int floors, String algorithm) {
-		Maze3d maze;
-		if(algorithm.toLowerCase().equals("growingtreegenerator")){
-			maze = new GrowingTreeGenerator().generate(rows, columns, floors);
-		}
-		else{
-			maze = new SimpleMaze3dGenerator().generate(rows, columns, floors);
-		}
-		this.nameToMazeMap.put(name, maze);
+		new Thread(new Runnable(){
+			@Override
+			public void run()
+			{
+				Maze3d maze;
+				if(algorithm.toLowerCase().equals("growingtree")){
+					maze = new GrowingTreeGenerator().generate(rows, columns, floors);
+					controller.message("Maze " + name + " is ready");
+				}
+				else{
+					maze = new SimpleMaze3dGenerator().generate(rows, columns, floors);
+					controller.message("Maze " + name + " is ready");
+				}
+				nameToMazeMap.put(name, maze);
+			}
+		}).start();
 	}
 
 	@Override
 	public void saveMaze(String name, String fileName){
 		try {
 			out = new MyCompressorOutputStream(new FileOutputStream(fileName));
-			nameToFileNameMap.put(name, fileName);
-			this.out.write(nameToMazeMap.get(name).toByteArray());
+			out.write(nameToMazeMap.get(name).toByteArray());
 			out.close();
 
 		} catch (FileNotFoundException e) {
@@ -70,7 +79,7 @@ public class MyModel implements Model{
 		}
 		finally {
 			try {
-				this.out.close();
+				out.close();
 			} catch (IOException e) {
 				controller.error(e.getMessage());
 			}
@@ -111,32 +120,36 @@ public class MyModel implements Model{
 
 	@Override
 	public void solveMaze(String name, String algorithm) {
+		new Thread(new Runnable(){
+			@Override
+			public void run()
+			{
+				Maze3d maze = nameToMazeMap.get(name);
+				SearchableAdapter searchableMaze = new SearchableAdapter(maze);
 
-		Maze3d maze = nameToMazeMap.get(name);
-		SearchableAdapter searchableMaze = new SearchableAdapter(maze);
-
-		Solution<Position> solution = null;
-		if( algorithm.toLowerCase().equals("bfs") ){
-			solution = new BestFirstSearch<Position>().Search(searchableMaze);
-		}
-		else if( algorithm.toLowerCase().equals("dfs") ){
-			solution = new DFS<Position>().Search(searchableMaze);
-		}
-		nameToSolutionMap.put(name, solution);
+				Solution<Position> solution = null;
+				if( algorithm.toLowerCase().equals("bfs") ){
+					solution = new BestFirstSearch<Position>().Search(searchableMaze);
+				}
+				else if( algorithm.toLowerCase().equals("dfs") ){
+					solution = new DFS<Position>().Search(searchableMaze);
+				}
+				controller.message("Solution for " + name + " is ready");	
+				nameToSolutionMap.put(name, solution);
+			}
+		}).start();
 	}
 
 	@Override
 	public void exit() {
 		if(out != null){
 			try {
-				this.out.close();
+				out.close();
 			} catch (IOException e) {
 				controller.error(e.getMessage());
 			}
 		}
-		controller.message("Bye!");
 		System.exit(0);
-
 	}
 
 	@Override

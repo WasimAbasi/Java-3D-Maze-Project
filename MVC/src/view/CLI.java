@@ -22,8 +22,6 @@ public class CLI{
 	public CLI(BufferedReader in, PrintWriter out, HashMap<String,Command> commands) {
 		this.in = in;
 		this.out = out;
-		/*this.commands = new HashMap<String,Command>();
-		this.commands.putAll(commands);*/
 		this.commands = commands;
 	}
 
@@ -36,16 +34,17 @@ public class CLI{
 				String [] command = new String[10]; //The largest command including parameters is less than 10 strings.
 
 				do{
-					System.out.println("Please enter a command:");
-					System.out.println("- dir <path>");
-					System.out.println("- generate_maze <name> <rows> <columns> <floors> <algorithm {Simple,GrowingTree}>");
-					System.out.println("- display <name>");
-					System.out.println("- display_cross_section <index {X,Y,Z}> <name>");
-					System.out.println("- save_maze <name> <file name>");
-					System.out.println("- load_maze <file name> <name>");
-					System.out.println("- solve <name> <algorithm {BFS,DFS}>");
-					System.out.println("- display_solution <name>");
-					System.out.println("- exit");
+					out.println("Please enter a command:");
+					out.println("- dir <path>");
+					out.println("- generate_maze <name> <rows> <columns> <floors> <algorithm {Simple,GrowingTree}>");
+					out.println("- display <name>");
+					out.println("- display_cross_section <index {X,Y,Z}> <name>");
+					out.println("- save_maze <name> <file name>");
+					out.println("- load_maze <file name> <name>");
+					out.println("- solve <name> <algorithm {BFS,DFS}>");
+					out.println("- display_solution <name>");
+					out.println("- exit");
+					out.flush();
 
 					int i = 0;
 					try{
@@ -63,10 +62,13 @@ public class CLI{
 						else
 						{
 							out.println("Invalid Command. Please try again.");
+							out.flush();
 						}
 					}catch(IOException e)
 					{
 						e.printStackTrace();
+					} catch(Exception e){
+						out.println("Invalid Command. Please try again.");
 					}
 				}while(command[0] != "exit");
 
