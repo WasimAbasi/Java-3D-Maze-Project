@@ -209,33 +209,6 @@ public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 			}
 			directions.remove(0);
 		}
-		
-		/*Random ran = new Random();
-		Direction direction = new Direction(ran.nextInt(4)); //random direction
-		for(int i=0; i<4; i++){ //used in case random direction isn't legal and a new direction is needed
-			Position nextMove = new Position(startPosition);
-			if(direction.toString().equals("Left")){
-				nextMove.setX(startPosition.getX()-1);
-			}
-			if(direction.toString().equals("Right")){
-				nextMove.setX(startPosition.getX()+1);
-			}
-			if(direction.toString().equals("Forward")){
-				nextMove.setY(startPosition.getY()+1);
-			}
-			if(direction.toString().equals("Back")){
-				nextMove.setY(startPosition.getY()-1);
-			}
-			if(legal(simpleMaze, nextMove)){
-				simpleMaze.setMaze3d(nextMove, 0);
-				success = findRandomPath(simpleMaze, nextMove, targetPosition);
-				if(success)
-					return true;
-				else
-					simpleMaze.setMaze3d(nextMove, 1);
-			}
-			direction.nextDirection();
-		}*/
 		return false;
 	}
 

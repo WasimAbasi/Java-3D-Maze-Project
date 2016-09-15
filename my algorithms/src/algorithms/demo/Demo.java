@@ -1,9 +1,8 @@
 package algorithms.demo;
 
-import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3dGenerator;
+import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.*;
 
 /**
@@ -44,7 +43,6 @@ public class Demo {
 	}
 
 	public static void main(String[] args) {
-		run(new GrowingTreeGenerator());
-		run(new SimpleMaze3dGenerator());
+		run(new MyMazeGenerator());
 	}
 }
