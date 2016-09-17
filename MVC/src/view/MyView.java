@@ -67,6 +67,8 @@ public class MyView implements View {
 			out.println();
 			out.flush();
 		}
+		out.println("Maze entrance at: " + maze.getStartPosition());
+		out.println("Maze exit at: " + maze.getGoalPosition());
 	}
 
 	@Override

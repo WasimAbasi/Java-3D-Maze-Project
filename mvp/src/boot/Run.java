@@ -4,30 +4,29 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import controller.*;
-import model.Model;
 import model.MyModel;
-import view.MyView;
-import view.View;
+import presenter.Presenter;
+import view.MyViewCLI;
 
 public class Run {
 
-	public static void main(String[] args){
-		
+	public static void main(String[] args) {
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
 	
-		View view = new MyView(in, out);
+		MyViewCLI view = new MyViewCLI(in, out);
 		
-		Model model = new MyModel();
+		MyModel model = new MyModel();
 		
-		MyController controller = new MyController(view, model);
+		Presenter presenter = new Presenter(model, view);
 		
-		model.SetController(controller);
+		model.addObserver(presenter);
+		
+		view.addObserver(presenter);
 		
 		view.start();
 		
 	}
+
 }
-
-
