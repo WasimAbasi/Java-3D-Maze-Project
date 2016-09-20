@@ -1,7 +1,11 @@
 package model;
 
 import java.util.Observable;
-
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,10 +16,12 @@ import java.util.HashMap;
 import algorithms.demo.SearchableAdapter;
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.BestFirstSearch;
 import algorithms.search.DFS;
+import algorithms.search.Searcher;
 import algorithms.search.Solution;
 import presenter.Presenter;
 import io.MyCompressorOutputStream;
@@ -29,41 +35,74 @@ import io.MyDecompressorInputStream;
 public class MyModel extends Observable implements Model{
 
 	private HashMap<String, Maze3d> nameToMazeMap;
-	private HashMap<String, Solution<Position>> nameToSolutionMap;
+	//private HashMap<String, Solution<Position>> nameToSolutionMap;
+	private HashMap<Maze3d, Solution<Position>> mazeToSolutionMap;
 
 	private MyCompressorOutputStream out;
 	private MyDecompressorInputStream in;
 
 	Presenter presenter;
 
+	private ExecutorService threadPool;
+
 	public MyModel(){
 		this.nameToMazeMap = new HashMap<String, Maze3d>();
-		this.nameToSolutionMap = new HashMap<String, Solution<Position>>();
+		//this.nameToSolutionMap = new HashMap<String, Solution<Position>>();
+		this.mazeToSolutionMap = new HashMap<Maze3d, Solution<Position>>();
+		this.threadPool = Executors.newFixedThreadPool(7);
 	}
 
 	@Override
 	public void generateMaze(String name, int rows, int columns, int floors, String algorithm) {
 		String[] command = new String[2];
-		command[0] = "message";
-		command[1] = "Maze" + name + " is ready";
-		new Thread(new Runnable(){
+		Future<Maze3d> future = threadPool.submit(new Callable<Maze3d>() 
+		{
 			@Override
-			public void run()
+			public Maze3d call() throws Exception
 			{
-				Maze3d maze;
-				if(algorithm.toLowerCase().equals("growingtree")){
-					maze = new GrowingTreeGenerator().generate(rows, columns, floors);
-					setChanged();
-					notifyObservers(command);
+				Maze3dGenerator generator;
+				if(algorithm.equals("growingtree")){
+					generator = new GrowingTreeGenerator();
 				}
 				else{
-					maze = new SimpleMaze3dGenerator().generate(rows, columns, floors);
+					generator = new SimpleMaze3dGenerator();
+				}
+				Maze3d maze = generator.generate(rows, columns, floors);
+				return maze;
+			}
+		});
+
+		//We chose to run future.get() in a thread because it might take time
+		threadPool.execute(new Runnable() {
+			@Override
+			public void run() {
+
+				try 
+				{
+					Maze3d maze = future.get();
+					nameToMazeMap.put(name, maze);
+					command[0] = "message";
+					command[1] = "Maze " + name + " is ready";
 					setChanged();
 					notifyObservers(command);
 				}
-				nameToMazeMap.put(name, maze);
+
+				catch (InterruptedException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(command);
+				} 
+				catch (ExecutionException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(e.getMessage());
+				}
 			}
-		}).start();
+		});
 	}
 
 	@Override
@@ -79,7 +118,7 @@ public class MyModel extends Observable implements Model{
 			command[1] = e.getMessage();
 			setChanged();
 			notifyObservers(command);
-			
+
 		}
 		catch(IOException e){
 			command[1] = e.getMessage();
@@ -138,29 +177,59 @@ public class MyModel extends Observable implements Model{
 	@Override
 	public void solveMaze(String name, String algorithm) {
 		String[] command = new String[2];
-		command[0] = "message";
-		command[1] = "Solution for " + name + " is ready";
-		new Thread(new Runnable(){
+		Future<Solution<Position>> future = threadPool.submit(new Callable<Solution<Position>>() 
+		{
 			@Override
-			public void run()
+			public Solution<Position> call() throws Exception
 			{
 				Maze3d maze = nameToMazeMap.get(name);
 				SearchableAdapter searchableMaze = new SearchableAdapter(maze);
-
-				Solution<Position> solution = null;
+				Searcher<Position> searcher;
 				if( algorithm.toLowerCase().equals("bfs") ){
-					solution = new BestFirstSearch<Position>().Search(searchableMaze);
-					setChanged();
-					notifyObservers(command);
+					searcher = new BestFirstSearch<Position>();
 				}
-				else if( algorithm.toLowerCase().equals("dfs") ){
-					solution = new DFS<Position>().Search(searchableMaze);
-					setChanged();
-					notifyObservers(command);
+				else{
+					searcher = new DFS<Position>();
 				}
-				nameToSolutionMap.put(name, solution);
+				Solution<Position> solution = searcher.Search(searchableMaze);
+				if(solution == null){
+					System.out.println("solution is null!");
+				}
+				return solution;
 			}
-		}).start();
+		});
+
+		//We chose to run future.get() in a thread because it might take time
+		threadPool.execute(new Runnable() {
+			@Override
+			public void run() {
+
+				try 
+				{
+					Solution<Position> solution = future.get();
+					mazeToSolutionMap.put(nameToMazeMap.get(name), solution);
+					command[0] = "message";
+					command[1] = "Solution for " + name + " is ready";
+					setChanged();
+					notifyObservers(command);
+				}
+
+				catch (InterruptedException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(command);
+				} 
+				catch (ExecutionException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(e.getMessage());
+				}
+			}
+		});
 	}
 
 	@Override
@@ -240,14 +309,14 @@ public class MyModel extends Observable implements Model{
 	public int getMazeSectionLength(String name, char section) {
 		Maze3d maze = nameToMazeMap.get(name);
 		if(maze != null){
-				switch (section) {
-				case 'x': 
-					return maze.getY();
-				case 'y': 
-					return maze.getX();
-				case 'z':
-					return maze.getX();
-				}
+			switch (section) {
+			case 'x': 
+				return maze.getY();
+			case 'y': 
+				return maze.getX();
+			case 'z':
+				return maze.getX();
+			}
 		}
 		return -1;
 	}
@@ -256,20 +325,21 @@ public class MyModel extends Observable implements Model{
 	public int getMazeSectionWidth(String name, char section) {
 		Maze3d maze = nameToMazeMap.get(name);
 		if(maze != null){
-				switch (section) {
-				case 'x': 
-					return maze.getZ();
-				case 'y': 
-					return maze.getZ();
-				case 'z':
-					return maze.getY();
-				}
+			switch (section) {
+			case 'x': 
+				return maze.getZ();
+			case 'y': 
+				return maze.getZ();
+			case 'z':
+				return maze.getY();
+			}
 		}
 		return -1;
 	}
 
 	@Override
 	public Solution<Position> getSolution(String name) {
-		return nameToSolutionMap.get(name);
+		Maze3d maze = nameToMazeMap.get(name);
+		return mazeToSolutionMap.get(maze);
 	}
 }

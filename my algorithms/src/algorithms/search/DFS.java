@@ -16,8 +16,8 @@ public class DFS<T> extends CommonSearcher<T> {
 	@Override
 	public Solution<T> Search(Searchable<T> s) {
 		State<T> startState = s.getStartState();
-		
-		return RecursiveDFS(s, startState);
+		RecursiveDFS(s, startState);
+		return backTrace(closedList.get(closedList.size()-1));
 	}
 	
 	/**
@@ -26,13 +26,14 @@ public class DFS<T> extends CommonSearcher<T> {
 	 * beginning from the entrance of a searchable problem.
 	 * @param s: a Searchable object
 	 * @param currentState: State that is being currently examined
-	 * @return Solution<T>: return the Solution of the Searchable object
+	 * @return Boolean: return true if solution was found
 	 */
-	public Solution<T> RecursiveDFS(Searchable<T> s, State<T> currentState){
+	public boolean RecursiveDFS(Searchable<T> s, State<T> currentState){
+		
 		closedList.add(currentState);
 		
 		if (currentState.equals(s.getGoalState())) {
-			return backTrace(currentState);
+			return true;
 		}
 			
 		List<State<T>> neighbors = s.getAllPossibleStates(currentState);
@@ -41,13 +42,14 @@ public class DFS<T> extends CommonSearcher<T> {
 			if(!closedList.contains(neighbor)){
 				evaluatedNodes++;
 				neighbor.setCameFrom(currentState);
+				if(neighbor==s.getGoalState())
+					System.out.println("SCREAMING!!!");
 				neighbor.setCost(currentState.getCost() + s.getMoveCost(currentState, neighbor));
 				
-                RecursiveDFS(s, neighbor);
+               if(RecursiveDFS(s, neighbor) == true)
+            	   return true;
+               }
 			}
-		}
-		
-		return null;
+		return false;
 	}
-
 }
