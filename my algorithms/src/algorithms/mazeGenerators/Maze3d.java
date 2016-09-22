@@ -1,5 +1,6 @@
 package algorithms.mazeGenerators;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -8,8 +9,12 @@ import java.util.LinkedList;
 * @author Wasim, Roaa
 *
 */
-public class Maze3d {
+public class Maze3d implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -225712387639818895L;
 	private int[][][] maze3d;
 	private int x;
 	private int y;

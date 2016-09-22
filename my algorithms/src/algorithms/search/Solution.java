@@ -1,5 +1,6 @@
 package algorithms.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,8 +9,12 @@ import java.util.ArrayList;
  *
  * @param <T>
  */
-public class Solution<T> {
+public class Solution<T> implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1503680616048555027L;
 	//solution is represented by a list of states that make up the solution
 	private ArrayList<State<T>> statesList = new ArrayList<State<T>>();
 

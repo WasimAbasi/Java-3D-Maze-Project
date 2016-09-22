@@ -1,13 +1,17 @@
 
 package algorithms.search;
 
+import java.io.Serializable;
+
 /**
  * Class State represents a generic state in a searchable problem
  * @author Wasim, Roaa
  * 
  * @param <T>
  */
-public class State<T> implements Comparable<State<T>> {
+public class State<T> implements Serializable, Comparable<State<T>> {
+	
+	private static final long serialVersionUID = -335412955882326284L;
 	private T value; // represents the state
 	private double cost = 0;  // cost to reach this state
 	private State<T> cameFrom;  // the state we came from to reach this state

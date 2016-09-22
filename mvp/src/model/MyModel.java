@@ -6,10 +6,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +40,6 @@ import io.MyDecompressorInputStream;
 public class MyModel extends Observable implements Model{
 
 	private HashMap<String, Maze3d> nameToMazeMap;
-	//private HashMap<String, Solution<Position>> nameToSolutionMap;
 	private HashMap<Maze3d, Solution<Position>> mazeToSolutionMap;
 
 	private MyCompressorOutputStream out;
@@ -47,8 +51,7 @@ public class MyModel extends Observable implements Model{
 
 	public MyModel(){
 		this.nameToMazeMap = new HashMap<String, Maze3d>();
-		//this.nameToSolutionMap = new HashMap<String, Solution<Position>>();
-		this.mazeToSolutionMap = new HashMap<Maze3d, Solution<Position>>();
+		loadMazeToSolutionMap();
 		this.threadPool = Executors.newFixedThreadPool(7);
 	}
 
@@ -245,7 +248,65 @@ public class MyModel extends Observable implements Model{
 				notifyObservers(command);
 			}
 		}
+		try {
+			saveMazeToSolutionMap(); //to use in future sessions
+		} catch (FileNotFoundException e) {
+			command[1] = e.getMessage();
+			setChanged();
+			notifyObservers(command);
+		} catch (IOException e) {
+			command[1] = e.getMessage();
+			setChanged();
+			notifyObservers(command);
+		}
 		System.exit(0);
+	}
+
+	private void saveMazeToSolutionMap() throws FileNotFoundException, IOException{
+		//there are no solutions to save
+		if(mazeToSolutionMap.isEmpty()){
+			return;
+		}
+		String[] command = new String[2];
+		command[0] = "error";
+		try {
+			ObjectOutputStream outFile = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("solutions")));
+			outFile.writeObject(mazeToSolutionMap);
+			outFile.flush();
+			outFile.close();
+		}
+		catch (IOException e) {
+			command[1] = e.getMessage();
+			setChanged();
+			notifyObservers(command);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadMazeToSolutionMap() {
+		File file = new File("solutions");
+		if(!file.exists()){
+			this.mazeToSolutionMap = new HashMap<Maze3d, Solution<Position>>();
+		}
+		else{
+			String[] command = new String[2];
+			command[0] = "error";
+			try {
+				ObjectInputStream inFile = new ObjectInputStream(new GZIPInputStream(new FileInputStream("solutions")));
+				mazeToSolutionMap = (HashMap<Maze3d, Solution<Position>>) inFile.readObject();
+				inFile.close();
+			}
+			catch (  IOException e) {
+				command[1] = e.getMessage();
+				setChanged();
+				notifyObservers(command);
+			} catch (ClassNotFoundException e) {
+				command[1] = e.getMessage();
+				setChanged();
+				notifyObservers(command);
+			}
+		}
 	}
 
 	@Override

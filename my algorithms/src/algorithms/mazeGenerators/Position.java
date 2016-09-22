@@ -1,12 +1,16 @@
 package algorithms.mazeGenerators;
 
+import java.io.Serializable;
+
 /**
  * Class Position represents a position in a three dimensional maze.
  * @author Wasim, Roaa
  *
  */
 
-public class Position {
+public class Position implements Serializable{
+
+	private static final long serialVersionUID = 7019568954128679805L;
 	private int x;
 	private int y;
 	private int z;
