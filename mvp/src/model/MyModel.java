@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +31,7 @@ import algorithms.search.DFS;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
 import presenter.Presenter;
+import presenter.Properties;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
@@ -38,6 +41,9 @@ import io.MyDecompressorInputStream;
  *
  */
 public class MyModel extends Observable implements Model{
+	
+	private String generateAlgorithm;
+	private String searchAlgorithm;
 
 	private HashMap<String, Maze3d> nameToMazeMap;
 	private HashMap<Maze3d, Solution<Position>> mazeToSolutionMap;
@@ -49,10 +55,62 @@ public class MyModel extends Observable implements Model{
 
 	private ExecutorService threadPool;
 
-	public MyModel(){
+	private Properties properties;
+
+	public MyModel(String[] propertiesPath){
+		loadXML(propertiesPath);
 		this.nameToMazeMap = new HashMap<String, Maze3d>();
 		loadMazeToSolutionMap();
-		this.threadPool = Executors.newFixedThreadPool(7);
+		this.threadPool = Executors.newFixedThreadPool(properties.getMaxNumOfThreads());
+	}
+
+	private void loadXML(String[] propertiesPath) {
+		
+		StringBuilder sb = new StringBuilder();
+
+		if(propertiesPath == null || propertiesPath.length == 0 || propertiesPath[0].intern() == "null")
+		{
+			sb.append("./src/resources/properties.xml");
+		}
+		else
+		{
+			for(int i=0;i<propertiesPath.length;i++)
+			{
+				if(i==propertiesPath.length-1)
+				{
+					sb.append(propertiesPath[i]);
+				}
+				else
+				{
+					sb.append(propertiesPath[i]+" ");
+				}
+			}
+		}
+		try
+		{
+			File f = new File(sb.toString());
+			//If the file doesn't exist generate a default one.
+			if(!f.exists())
+			{
+				XMLEncoder xmlE = new XMLEncoder(new FileOutputStream(sb.toString()));
+				xmlE.writeObject(new Properties(10, "dfs", "growingtree","gui"));
+				xmlE.close();
+			}
+			
+			//the file exist -> load it
+			XMLDecoder xmlD = new XMLDecoder(new FileInputStream(sb.toString()));
+			properties = (Properties) xmlD.readObject();
+			xmlD.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			String[] command = new String[2];
+			command[0]="error";
+			command[1]=e.getMessage();
+			setChanged();
+			notifyObservers(command);
+		}
+
 	}
 
 	@Override
@@ -64,7 +122,13 @@ public class MyModel extends Observable implements Model{
 			public Maze3d call() throws Exception
 			{
 				Maze3dGenerator generator;
-				if(algorithm.equals("growingtree")){
+				if(algorithm == null){ //user didn't supply a specific algorithms so we're using the default.
+					generateAlgorithm = properties.getGenerateAlgorithm();
+				}
+				else{
+					generateAlgorithm = algorithm;
+				}
+				if(generateAlgorithm.toLowerCase().equals("growingtree")){
 					generator = new GrowingTreeGenerator();
 				}
 				else{
@@ -188,16 +252,18 @@ public class MyModel extends Observable implements Model{
 				Maze3d maze = nameToMazeMap.get(name);
 				SearchableAdapter searchableMaze = new SearchableAdapter(maze);
 				Searcher<Position> searcher;
-				if( algorithm.toLowerCase().equals("bfs") ){
+				if(algorithm == null){
+					searchAlgorithm = properties.getSearchAlgorithm();
+				} else{
+					searchAlgorithm = algorithm;
+				}
+				if( searchAlgorithm.toLowerCase().equals("bfs") ){
 					searcher = new BestFirstSearch<Position>();
 				}
 				else{
 					searcher = new DFS<Position>();
 				}
 				Solution<Position> solution = searcher.Search(searchableMaze);
-				if(solution == null){
-					System.out.println("solution is null!");
-				}
 				return solution;
 			}
 		});

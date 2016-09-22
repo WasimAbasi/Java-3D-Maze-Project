@@ -48,12 +48,12 @@ public class MyViewCLI extends Observable implements View {
 					do{
 						out.println("Please enter a command:");
 						out.println("- dir <path>");
-						out.println("- generate_maze <name> <rows> <columns> <floors> <algorithm {Simple,GrowingTree}>");
+						out.println("- generate_maze <name> <rows> <columns> <floors> <algorithm {Simple,GrowingTree}(optional)>");
 						out.println("- display <name>");
 						out.println("- display_cross_section <index {X,Y,Z}> <name>");
 						out.println("- save_maze <name> <file name>");
 						out.println("- load_maze <file name> <name>");
-						out.println("- solve <name> <algorithm {BFS,DFS}>");
+						out.println("- solve <name> <algorithm {BFS,DFS}(optional)>");
 						out.println("- display_solution <name>");
 						out.println("- exit");
 						out.flush();

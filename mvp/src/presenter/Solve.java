@@ -22,7 +22,8 @@ public class Solve implements Command{
 	public void doCommand(String[] commandParameters) {
 		try {
 			if( (model.getMaze(commandParameters[1]) != null) && 
-					(commandParameters[2].toLowerCase().equals("bfs") || commandParameters[2].toLowerCase().equals("dfs")) ){
+					(commandParameters[2] == null ||
+					commandParameters[2].toLowerCase().equals("bfs") || commandParameters[2].toLowerCase().equals("dfs")) ){
 				model.solveMaze(commandParameters[1] , commandParameters[2]);
 			}
 			else{

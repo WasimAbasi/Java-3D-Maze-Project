@@ -14,10 +14,10 @@ public class Run {
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
+		
+		MyModel model = new MyModel(args);
 	
 		MyViewCLI view = new MyViewCLI(in, out);
-		
-		MyModel model = new MyModel();
 		
 		Presenter presenter = new Presenter(model, view);
 		
