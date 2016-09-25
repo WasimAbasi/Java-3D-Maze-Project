@@ -38,6 +38,9 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 	 * Method Search finds a solution for a searchable type using best first search algorithm
 	 */
 	public Solution<T> Search(Searchable<T> s) {
+		if(s == null){
+			return null;
+		}
 		State<T> startState = s.getStartState();
 		openList.add(startState); // define the start state
 		

@@ -30,6 +30,9 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
 	 * @return {@link Solution}
 	 */
 	protected Solution<T> backTrace(State<T> goalState){ 
+		if(goalState == null){
+			return null;
+		}
 		Solution<T> sol = new Solution<T>();
 		State<T> currState = goalState;
 		ArrayList<State<T>> states = new ArrayList<State<T>>();
