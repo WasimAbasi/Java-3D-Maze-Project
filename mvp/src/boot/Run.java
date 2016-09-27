@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import model.MyModel;
 import presenter.Presenter;
 import view.MyViewCLI;
+import view.MyViewGUI;
 
 public class Run {
 
@@ -16,16 +17,35 @@ public class Run {
 		PrintWriter out = new PrintWriter(System.out);
 		
 		MyModel model = new MyModel(args);
+		
+
+		
+		String userInterface = model.getProperties().getUserInterface();
 	
-		MyViewCLI view = new MyViewCLI(in, out);
-		
-		Presenter presenter = new Presenter(model, view);
-		
-		model.addObserver(presenter);
-		
-		view.addObserver(presenter);
-		
-		view.start();
+		if(userInterface.equals("gui"))
+		{
+			MyViewGUI view = new MyViewGUI();
+			
+			Presenter presenter = new Presenter(model, view);
+			
+			model.addObserver(presenter);
+			
+			view.addObserver(presenter);
+			
+			view.start();
+		}
+		else if(userInterface.equals("cli"))
+		{
+			MyViewCLI view = new MyViewCLI(in, out);
+			
+			Presenter presenter = new Presenter(model, view);
+			
+			model.addObserver(presenter);
+			
+			view.addObserver(presenter);
+			
+			view.start();
+		}
 		
 	}
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_101" class="java.beans.XMLDecoder">
+ <object class="presenter.Properties">
+  <void property="generateAlgorithm">
+   <string>growingtree</string>
+  </void>
+  <void property="maxNumOfThreads">
+   <int>10</int>
+  </void>
+  <void property="searchAlgorithm">
+   <string>dfs</string>
+  </void>
+  <void property="userInterface">
+   <string>gui</string>
+  </void>
+ </object>
+</java>

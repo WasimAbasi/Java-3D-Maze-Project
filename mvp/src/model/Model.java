@@ -6,6 +6,7 @@ import java.io.IOException;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import presenter.Properties;
 
 /**
  * Interface Model represents the functionality of a model as a component of the MVC pattern.
@@ -84,4 +85,8 @@ public interface Model
 	 * @param section
 	 */
 	int getMazeSectionLength(String name, char section);
+
+	void loadXML(String[] propertiesPath);
+
+	Properties getProperties();
 }

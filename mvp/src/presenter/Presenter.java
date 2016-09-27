@@ -26,6 +26,9 @@ public class Presenter implements Observer {
 		commands.put("solve", new Solve(this.model, this.view)); 
 		commands.put("display_solution", new DisplaySolution(this.model, this.view));
 		commands.put("exit", new Exit(this.model));
+		commands.put("load_xml", new LoadXML(this.model));
+		
+		//add solve from m and correct the command in GUI
 	}
 
 	@Override

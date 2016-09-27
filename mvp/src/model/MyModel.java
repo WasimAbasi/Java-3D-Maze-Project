@@ -64,7 +64,13 @@ public class MyModel extends Observable implements Model{
 		this.threadPool = Executors.newFixedThreadPool(properties.getMaxNumOfThreads());
 	}
 
-	private void loadXML(String[] propertiesPath) {
+	@Override
+	public Properties getProperties(){
+		return properties;
+	}
+	
+	@Override
+	public void loadXML(String[] propertiesPath) {
 		
 		StringBuilder sb = new StringBuilder();
 
