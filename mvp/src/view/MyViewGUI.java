@@ -48,6 +48,7 @@ public class MyViewGUI extends Observable implements View {
 				 messageBox.setText("Exiting Application");
 				 if(messageBox.open()==SWT.YES)
 				 {
+					 message = new String[1];
 					 message[0] = "exit";
 					 setChanged();
 					 notifyObservers(message);
