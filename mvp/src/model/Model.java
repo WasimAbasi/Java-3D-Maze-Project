@@ -89,4 +89,8 @@ public interface Model
 	void loadXML(String[] propertiesPath);
 
 	Properties getProperties();
+
+	void solveFrom(String name, String algorithm, int x, int y, int z);
+
+	
 }

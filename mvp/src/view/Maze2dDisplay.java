@@ -20,7 +20,7 @@ public class Maze2dDisplay extends MazeDisplay {
 	
 	private Image start_im;//the image of the starting point
 	private Image end_im;//the image of the ending point
-	private Image prize_im;//the image that you grt when you win
+	private Image prize_im;//the image that you get when you win
 	
 	/**
 	 * constructor using fields

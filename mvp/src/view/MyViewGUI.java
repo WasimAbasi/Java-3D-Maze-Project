@@ -94,16 +94,16 @@ public class MyViewGUI extends Observable implements View {
 				int y=mp.getWidth();
 				int z=mp.getDepth();
 				
-				String[] command = new String[5];
+				String[] command = new String[6];
 				command[0] = "generate_maze";
-				command[1] = "m"; //arbitrary name for the maze
+				command[1] = "m1"; //arbitrary name for the maze
 				command[2] = Integer.toString(x);
 				command[3] = Integer.toString(y);
 				command[4] = Integer.toString(z);
+				command[5] = null; //the generating algorithm will be taken from the xml file
 				
 				setChanged();
 				notifyObservers(command);
-				
 				
 			}
 		});
@@ -117,12 +117,17 @@ public class MyViewGUI extends Observable implements View {
 				int y=characterPosition.getY();
 				int z=characterPosition.getZ();
 				
-				//TO BE CORRECTED!!!
-				message[0]="solve from m "+x+" "+y+" "+z;
+				String[] command = new String[6];
+				command[0] = "solve_from";
+				command[1] = "m1";
+				command[2] = null;
+				command[3] = Integer.toString(x);
+				command[4] = Integer.toString(y);
+				command[5] = Integer.toString(z);
 				
 				isSolved=true;
 				setChanged();
-				notifyObservers(message);
+				notifyObservers(command);
 			}
 		});
 		listeners.put("hint", new Listener() {
@@ -135,10 +140,17 @@ public class MyViewGUI extends Observable implements View {
 				int y=characterPosition.getY();
 				int z=characterPosition.getZ();
 				
-				message[0]="solve from m "+x+" "+y+" "+z;
+				String[] command = new String[6];
+				command[0] = "solve_from";
+				command[1] = "m1";
+				command[2] = null;
+				command[3] = Integer.toString(x);
+				command[4] = Integer.toString(y);
+				command[5] = Integer.toString(z);
+				
 				isSolved=false;
 				setChanged();
-				notifyObservers(message);
+				notifyObservers(command);
 			}
 		});
 		listeners.put("reset", new Listener() {
@@ -291,6 +303,7 @@ public class MyViewGUI extends Observable implements View {
 
 	@Override
 	public void display(Maze3d maze) {
+		this.maze = maze;
 		characterPosition = new Position(maze.getStartPosition().getX(),maze.getStartPosition().getY(),maze.getStartPosition().getZ());
 		mainWindow.setMazeInCanvas(maze);
 		mainWindow.moveCharacterInCanvas(maze.getStartPosition().getX(),maze.getStartPosition().getY(),maze.getStartPosition().getZ(),canBeMovedUp(),canBeMovedDown(),true,isBeingSolved);
@@ -312,7 +325,7 @@ public class MyViewGUI extends Observable implements View {
 	@Override
 	public void message(String message) {
 		
-		mainWindow.showMessageBox(message);
+	//	mainWindow.showMessageBox(message);
 
 	}
 

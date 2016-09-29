@@ -24,11 +24,11 @@ public class Presenter implements Observer {
 		commands.put("save_maze", new SaveMaze(this.model, this.view));	
 		commands.put("load_maze", new LoadMaze(this.model, this.view));
 		commands.put("solve", new Solve(this.model, this.view)); 
+		commands.put("solve_from", new SolveFrom(this.model, this.view)); 
 		commands.put("display_solution", new DisplaySolution(this.model, this.view));
 		commands.put("exit", new Exit(this.model));
 		commands.put("load_xml", new LoadXML(this.model));
 		
-		//add solve from m and correct the command in GUI
 	}
 
 	@Override
@@ -41,6 +41,9 @@ public class Presenter implements Observer {
 			{
 			case "message":
 				view.message(command[1]);
+				if(command[1].startsWith("Maze m1")){
+					view.display(model.getMaze("m1"));
+				}
 			break;
 			case "error":
 				view.error(command[1]);

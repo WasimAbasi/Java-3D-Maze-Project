@@ -306,6 +306,70 @@ public class MyModel extends Observable implements Model{
 			}
 		});
 	}
+	
+	
+	@Override
+	public void solveFrom(String name, String algorithm, int x, int y, int z) {
+		String[] command = new String[2];
+		Future<Solution<Position>> future = threadPool.submit(new Callable<Solution<Position>>() 
+		{
+			@Override
+			public Solution<Position> call() throws Exception
+			{
+				Maze3d maze = nameToMazeMap.get(name);
+				maze.setEntrance(new Position(x, y, z));
+				SearchableAdapter searchableMaze = new SearchableAdapter(maze);
+				Searcher<Position> searcher;
+				if(algorithm == null){
+					searchAlgorithm = properties.getSearchAlgorithm();
+				} else{
+					searchAlgorithm = algorithm;
+				}
+				if( searchAlgorithm.toLowerCase().equals("bfs") ){
+					searcher = new BestFirstSearch<Position>();
+				}
+				else{
+					searcher = new DFS<Position>();
+				}
+				Solution<Position> solution = searcher.Search(searchableMaze);
+				return solution;
+			}
+		});
+
+		//We chose to run future.get() in a thread because it might take time
+		threadPool.execute(new Runnable() {
+			@Override
+			public void run() {
+
+				try 
+				{
+					Solution<Position> solution = future.get();
+					mazeToSolutionMap.put(nameToMazeMap.get(name), solution);
+					command[0] = "message";
+					command[1] = "Solution for " + name + " is ready";
+					setChanged();
+					notifyObservers(command);
+				}
+
+				catch (InterruptedException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(command);
+				} 
+				catch (ExecutionException e) 
+				{
+					command[0] = "error";
+					command[1] = e.getMessage();
+					setChanged();
+					notifyObservers(e.getMessage());
+				}
+			}
+		});
+	}
+
+	
 
 	@Override
 	public void exit() {
