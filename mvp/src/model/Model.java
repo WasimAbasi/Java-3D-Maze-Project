@@ -92,5 +92,7 @@ public interface Model
 
 	void solveFrom(String name, String algorithm, int x, int y, int z);
 
+	Solution<Position> getHalfSolution(String name);
+
 	
 }

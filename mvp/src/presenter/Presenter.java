@@ -44,6 +44,12 @@ public class Presenter implements Observer {
 				if(command[1].startsWith("Maze m1")){
 					view.display(model.getMaze("m1"));
 				}
+				if(command[1].startsWith("Solution for m1")){
+					view.displaySolution(model.getSolution("m1"));
+				}
+				if(command[1].startsWith("Half Solution for m1")){
+					view.displaySolution(model.getHalfSolution("m1"));
+				}
 			break;
 			case "error":
 				view.error(command[1]);

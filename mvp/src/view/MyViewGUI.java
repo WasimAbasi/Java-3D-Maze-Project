@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -14,6 +15,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import algorithms.search.State;
 
 public class MyViewGUI extends Observable implements View {
 	
@@ -179,18 +181,18 @@ public class MyViewGUI extends Observable implements View {
 				if((event.keyCode==SWT.ARROW_RIGHT)||(event.keyCode==SWT.KEYPAD_6))
 				{
 					
-					if((z<mazeArr[0][0].length-1)&&(mazeArr[x][y][z+1]==0))
+					if((x<mazeArr.length-1)&&(mazeArr[x+1][y][z]==0))
 					{
-						characterPosition.setPosition(x, y, z+1);
-						mainWindow.moveCharacterInCanvas(x, y, z+1,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+						characterPosition.setPosition(x+1, y, z);
+						mainWindow.moveCharacterInCanvas(x+1, y, z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
 					}
 				}
 				else if((event.keyCode==SWT.ARROW_LEFT)||(event.keyCode==SWT.KEYPAD_4))
 				{
-					if((z>0)&&(mazeArr[x][y][z-1]==0))
+					if((x>0)&&(mazeArr[x-1][y][z]==0))
 					{
-						characterPosition.setPosition(x, y, z-1);
-						mainWindow.moveCharacterInCanvas(x, y, z-1,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+						characterPosition.setPosition(x-1, y, z);
+						mainWindow.moveCharacterInCanvas(x-1, y, z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
 					}
 				}
 				else if((event.keyCode==SWT.ARROW_UP)||(event.keyCode==SWT.KEYPAD_8))
@@ -212,18 +214,18 @@ public class MyViewGUI extends Observable implements View {
 				}
 				else if(event.keyCode==SWT.PAGE_DOWN)
 				{
-					if((x>0)&&(mazeArr[x-1][y][z]==0))
+					if((z>0)&&(mazeArr[x][y][z-1]==0))
 					{
-						characterPosition.setPosition(x-1, y, z);
-						mainWindow.moveCharacterInCanvas(x-1, y, z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+						characterPosition.setPosition(x, y, z-1);
+						mainWindow.moveCharacterInCanvas(x, y, z-1,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
 					}
 				}
 				else if(event.keyCode==SWT.PAGE_UP)
 				{
-					if((x<mazeArr.length-1)&&(mazeArr[x+1][y][z]==0))
+					if((z<mazeArr.length-1)&&(mazeArr[x][y][z+1]==0))
 					{
-						characterPosition.setPosition(x+1, y, z);
-						mainWindow.moveCharacterInCanvas(x+1, y, z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+						characterPosition.setPosition(x, y, z+1);
+						mainWindow.moveCharacterInCanvas(x, y, z+1,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
 					}
 				}
 				
@@ -313,7 +315,77 @@ public class MyViewGUI extends Observable implements View {
 	public void displayCrossSection(int[][] section, int length, int width) {}
 
 	@Override
-	public void displaySolution(Solution<Position> solution) {}
+	public void displaySolution(Solution<Position> solution) {
+		if(isSolved)
+		{	
+			
+			ArrayList<State<Position>> al=solution.getStatesList();
+			
+			
+			Thread thread=new Thread(new Runnable() {
+				
+				@Override
+				public void run() 
+				{
+					for(State<Position> s:al)
+					{
+						if(mainWindow.IsDisposed())
+						{
+							return;
+						}
+						
+						Position p=s.getValue();
+						if(p.equals(maze.getGoalPosition()))
+						{
+							isBeingSolved=false;
+						}
+						int x=p.getX();
+						int y=p.getY();
+						int z=p.getZ();
+						
+						
+						characterPosition.setPosition(x, y, z);
+						
+						mainWindow.moveCharacterInCanvas(x,y,z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+						
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							
+							//e.printStackTrace();
+						}
+					}
+					
+				}
+			});
+			thread.start();
+			
+		}
+		else//if hint
+		{
+			ArrayList<State<Position>> al=solution.getStatesList();
+			if(al.isEmpty())
+			{
+				return;
+			}
+			if(al.size()<2)
+			{
+				mainWindow.showMessageBox("You are already in the goal Position,can't show hint");
+				return;
+			}
+			Position p=al.get(1).getValue();
+			
+			if(p!=null)
+			{
+				int x=p.getX();
+				int y=p.getY();
+				int z=p.getZ();
+				characterPosition.setPosition(x, y, z);
+				mainWindow.moveCharacterInCanvas(x, y, z,canBeMovedUp(),canBeMovedDown(),false,isBeingSolved);
+	
+			}
+		}
+	}
 
 	@Override
 	public void error(String errorMessage) {
@@ -323,10 +395,8 @@ public class MyViewGUI extends Observable implements View {
 	}
 
 	@Override
-	public void message(String message) {
-		
-	//	mainWindow.showMessageBox(message);
+	public void message(String message) {}
 
-	}
+
 
 }

@@ -63,27 +63,25 @@ public class Maze2dDisplay extends MazeDisplay {
 
 
 
-					int width = getSize().x;// how many pixels there are in the canvas in the width(z in the maze)
-					int depth = getSize().y;// how many pixels there is on the canvas in height(y in the maze)
+					int width = getSize().x;// how many pixels there are in the canvas in the width
+					int depth = getSize().y;// how many pixels there is on the canvas in depth
 
 					// the size of each cell in the canvas,according to the size of the changing window
-					int cellX = width / mazeData[0][0].length;// the width of the cell
+					int cellX = width / mazeData.length;// the width of the cell
 					int cellY = depth / mazeData[0].length; // the height of the cell
 
 
 
 
 					// for calculating the size of the maze floor
-					int lengthWidth = mazeData[0][0].length;// the length of z axis in the maze
+					int lengthWidth = mazeData.length;// the length of x axis in the maze
 					int lengthDepth = mazeData[0].length;// the length of y axis in the maze
 
 					for (int i = 0; i < lengthDepth; i++) {
 						for (int j = 0; j < lengthWidth; j++) {
-							// this is the maze where i am starting to draw the
-							// cell
-							int pixelX = cellX * j;
-							int pixelY = cellY * i;
-							if (mazeData[characterPlace.getX()][i][j] != 0)
+							int pixelX = cellX * i;
+							int pixelY = cellY * j;
+							if (mazeData[i][j][characterPlace.getZ()] != 0)
 							{
 								e.gc.fillRectangle(pixelX, pixelY, cellX, cellY);
 								// drawing rectangle from the node cell size
@@ -92,24 +90,24 @@ public class Maze2dDisplay extends MazeDisplay {
 						}
 					}
 					
-					if(characterPlace.getX()==maze.getGoalPosition().getX())
+					if(characterPlace.getZ()==maze.getGoalPosition().getZ())
 					{
 						
 						e.gc.setBackground(new Color(null,200,0,0));						
-						e.gc.drawImage(end_im, 0, 0, end_im.getBounds().width,end_im.getBounds().height,maze.getGoalPosition().getZ()*cellX,maze.getGoalPosition().getY()*cellY ,cellX ,cellY);							
+						e.gc.drawImage(end_im, 0, 0, end_im.getBounds().width,end_im.getBounds().height,maze.getGoalPosition().getX()*cellX,maze.getGoalPosition().getY()*cellY ,cellX ,cellY);							
 						e.gc.setBackground(new Color(null,255,0,0));
 						e.gc.setBackground(new Color(null,0,0,0));
 					}
-					if(characterPlace.getX()==maze.getStartPosition().getX())
+					if(characterPlace.getZ()==maze.getStartPosition().getZ())
 					{
 						
 						e.gc.setBackground(new Color(null,200,0,0));						
-						e.gc.drawImage(start_im, 0, 0, start_im.getBounds().width,start_im.getBounds().height,maze.getStartPosition().getZ()*cellX,maze.getStartPosition().getY()*cellY ,cellX ,cellY);							
+						e.gc.drawImage(start_im, 0, 0, start_im.getBounds().width,start_im.getBounds().height,maze.getStartPosition().getX()*cellX,maze.getStartPosition().getY()*cellY ,cellX ,cellY);							
 						e.gc.setBackground(new Color(null,255,0,0));
 						e.gc.setBackground(new Color(null,0,0,0));
 					}
 					
-					characterPic.paint(e,characterPlace.getZ()*cellX,characterPlace.getY()*cellY, cellX, cellY);
+					characterPic.paint(e,characterPlace.getX()*cellX,characterPlace.getY()*cellY, cellX, cellY);
 					
 					if(characterPlace.equals(maze.getGoalPosition()))
 					{

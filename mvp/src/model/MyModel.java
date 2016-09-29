@@ -47,6 +47,7 @@ public class MyModel extends Observable implements Model{
 
 	private HashMap<String, Maze3d> nameToMazeMap;
 	private HashMap<Maze3d, Solution<Position>> mazeToSolutionMap;
+	private HashMap<Maze3d, Solution<Position>> mazeToHalfSolutionMap;
 
 	private MyCompressorOutputStream out;
 	private MyDecompressorInputStream in;
@@ -60,6 +61,7 @@ public class MyModel extends Observable implements Model{
 	public MyModel(String[] propertiesPath){
 		loadXML(propertiesPath);
 		this.nameToMazeMap = new HashMap<String, Maze3d>();
+		this.mazeToHalfSolutionMap = new HashMap<Maze3d, Solution<Position>>();
 		loadMazeToSolutionMap();
 		this.threadPool = Executors.newFixedThreadPool(properties.getMaxNumOfThreads());
 	}
@@ -344,9 +346,9 @@ public class MyModel extends Observable implements Model{
 				try 
 				{
 					Solution<Position> solution = future.get();
-					mazeToSolutionMap.put(nameToMazeMap.get(name), solution);
+					mazeToHalfSolutionMap.put(nameToMazeMap.get(name), solution);
 					command[0] = "message";
-					command[1] = "Solution for " + name + " is ready";
+					command[1] = "Half Solution for " + name + " is ready";
 					setChanged();
 					notifyObservers(command);
 				}
@@ -538,5 +540,11 @@ public class MyModel extends Observable implements Model{
 	public Solution<Position> getSolution(String name) {
 		Maze3d maze = nameToMazeMap.get(name);
 		return mazeToSolutionMap.get(maze);
+	}
+	
+	@Override
+	public Solution<Position> getHalfSolution(String name) {
+		Maze3d maze = nameToMazeMap.get(name);
+		return mazeToHalfSolutionMap.get(maze);
 	}
 }
