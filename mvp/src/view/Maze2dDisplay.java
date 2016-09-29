@@ -77,8 +77,8 @@ public class Maze2dDisplay extends MazeDisplay {
 					int lengthWidth = mazeData.length;// the length of x axis in the maze
 					int lengthDepth = mazeData[0].length;// the length of y axis in the maze
 
-					for (int i = 0; i < lengthDepth; i++) {
-						for (int j = 0; j < lengthWidth; j++) {
+					for (int i = 0; i < lengthWidth; i++) {
+						for (int j = 0; j < lengthDepth; j++) {
 							int pixelX = cellX * i;
 							int pixelY = cellY * j;
 							if (mazeData[i][j][characterPlace.getZ()] != 0)
