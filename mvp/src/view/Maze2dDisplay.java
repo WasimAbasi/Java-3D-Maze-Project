@@ -34,9 +34,9 @@ public class Maze2dDisplay extends MazeDisplay {
 		setBackground(new Color(null, 255, 255, 255));
 		this.characterPlace=null;
 		this.characterPic=characterPic;
-		end_im = new Image(getDisplay(), "./src/resources/banana.jpg");
-		start_im = new Image(getDisplay(), "./src/resources/start.jpeg");
-		prize_im=new Image(getDisplay(), "./src/resources/FotorCreated.jpg");
+		end_im = new Image(getDisplay(), "./resources/banana.jpg");
+		start_im = new Image(getDisplay(), "./resources/start.jpeg");
+		prize_im=new Image(getDisplay(), "./resources/FotorCreated.jpg");
 	}
 	/**
 	 * defines the listener that paint the maze

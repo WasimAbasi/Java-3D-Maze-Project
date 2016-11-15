@@ -17,7 +17,7 @@ public class ConstructProperties {
 	{		
 		try 
 		{
-			XMLEncoder xmlE = new XMLEncoder(new FileOutputStream("./src/resources/properties.xml"));
+			XMLEncoder xmlE = new XMLEncoder(new FileOutputStream("./resources/properties.xml"));
 			xmlE.writeObject(new Properties(10, "dfs", "growingtree","gui"));
 			xmlE.close();
 		} 

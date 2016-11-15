@@ -78,7 +78,7 @@ public class MyModel extends Observable implements Model{
 
 		if(propertiesPath == null || propertiesPath.length == 0 || propertiesPath[0].intern() == "null")
 		{
-			sb.append("./src/resources/properties.xml");
+			sb.append("./resources/properties.xml");
 		}
 		else
 		{
